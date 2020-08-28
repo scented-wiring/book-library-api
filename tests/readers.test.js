@@ -13,7 +13,7 @@ describe('/readers', () => {
         const response = await request(app).post('/readers').send({
           name: 'Elizabeth Bennet',
           email: 'future_ms_darcy@gmail.com',
-          password: 'bennet1',
+          password: 'bennet1000',
         });
         const newReaderRecord = await Reader.findByPk(response.body.id, {
           raw: true,
@@ -23,7 +23,68 @@ describe('/readers', () => {
         expect(response.body.name).to.equal('Elizabeth Bennet');
         expect(newReaderRecord.name).to.equal('Elizabeth Bennet');
         expect(newReaderRecord.email).to.equal('future_ms_darcy@gmail.com');
-        expect(newReaderRecord.password).to.equal('bennet1');
+        expect(newReaderRecord.password).to.equal('bennet1000');
+      });
+
+      it('throws an error if email is not valid', async () => {
+        const response = await request(app).post('/readers').send({
+          name: 'Elizabeth Bennet',
+          email: 'whatisemail',
+          password: 'bennet1000',
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.errors.length).to.equal(1);
+        expect(response.body.errors[0]).to.equal(
+          'Email address must be valid.'
+        );
+      });
+
+      it('throws an error if email is null', async () => {
+        const response = await request(app).post('/readers').send({
+          name: 'Elizabeth Bennet',
+          password: 'bennet1000',
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.errors.length).to.equal(1);
+        expect(response.body.errors[0]).to.equal('Email address is required.');
+      });
+
+      it('throws an error if name is null', async () => {
+        const response = await request(app).post('/readers').send({
+          email: 'future_ms_darcy@gmail.com',
+          password: 'bennet1000',
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.errors.length).to.equal(1);
+        expect(response.body.errors[0]).to.equal('Name is required.');
+      });
+
+      it('throws an error if password is null', async () => {
+        const response = await request(app).post('/readers').send({
+          name: 'Elizabeth Bennet',
+          email: 'future_ms_darcy@gmail.com',
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.errors.length).to.equal(1);
+        expect(response.body.errors[0]).to.equal('Password is required.');
+      });
+
+      it('throws an error if password is less than 8 characters', async () => {
+        const response = await request(app).post('/readers').send({
+          name: 'Elizabeth Bennet',
+          email: 'future_ms_darcy@gmail.com',
+          password: 'hi',
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.errors.length).to.equal(1);
+        expect(response.body.errors[0]).to.equal(
+          'Password must be a minimum of 8 characters.'
+        );
       });
     });
   });
@@ -38,17 +99,17 @@ describe('/readers', () => {
         Reader.create({
           name: 'Elizabeth Bennet',
           email: 'future_ms_darcy@gmail.com',
-          password: 'bennet1',
+          password: 'bennet1000',
         }),
         Reader.create({
           name: 'Arya Stark',
           email: 'vmorgul@me.com',
-          password: 'stark101',
+          password: 'stark1010101',
         }),
         Reader.create({
           name: 'Lyra Belacqua',
           email: 'darknorth123@msn.org',
-          password: 'lyra1000',
+          password: 'lyra10009999',
         }),
       ]);
     });

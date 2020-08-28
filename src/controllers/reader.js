@@ -9,9 +9,13 @@ const getReaders = (_, res) => {
 const createReader = (req, res) => {
   const newReader = req.body;
 
-  Reader.create(newReader).then((newReaderCreated) =>
-    res.status(201).json(newReaderCreated)
-  );
+  Reader.create(newReader)
+    .then((newReaderCreated) => res.status(201).json(newReaderCreated))
+    .catch((error) => {
+      const errorMessages = error.errors.map((e) => e.message);
+
+      return res.status(400).json({ errors: errorMessages });
+    });
 };
 
 const updateReader = (req, res) => {
