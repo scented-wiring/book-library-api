@@ -26,7 +26,7 @@ describe('/readers', () => {
         expect(newReaderRecord.password).to.equal('bennet1000');
       });
 
-      it('throws an error if email is not valid', async () => {
+      it('returns an error if email is not valid', async () => {
         const response = await request(app).post('/readers').send({
           name: 'Elizabeth Bennet',
           email: 'whatisemail',
@@ -40,7 +40,7 @@ describe('/readers', () => {
         );
       });
 
-      it('throws an error if email is null', async () => {
+      it('returns an error if email is null', async () => {
         const response = await request(app).post('/readers').send({
           name: 'Elizabeth Bennet',
           password: 'bennet1000',
@@ -51,7 +51,7 @@ describe('/readers', () => {
         expect(response.body.errors[0]).to.equal('Email address is required.');
       });
 
-      it('throws an error if name is null', async () => {
+      it('returns an error if name is null', async () => {
         const response = await request(app).post('/readers').send({
           email: 'future_ms_darcy@gmail.com',
           password: 'bennet1000',
@@ -62,7 +62,7 @@ describe('/readers', () => {
         expect(response.body.errors[0]).to.equal('Name is required.');
       });
 
-      it('throws an error if password is null', async () => {
+      it('returns an error if password is null', async () => {
         const response = await request(app).post('/readers').send({
           name: 'Elizabeth Bennet',
           email: 'future_ms_darcy@gmail.com',
@@ -73,7 +73,7 @@ describe('/readers', () => {
         expect(response.body.errors[0]).to.equal('Password is required.');
       });
 
-      it('throws an error if password is less than 8 characters', async () => {
+      it('returns an error if password is less than 8 characters', async () => {
         const response = await request(app).post('/readers').send({
           name: 'Elizabeth Bennet',
           email: 'future_ms_darcy@gmail.com',

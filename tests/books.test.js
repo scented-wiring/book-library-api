@@ -27,6 +27,30 @@ describe('/books', () => {
         expect(newBookRecord.genre).to.equal('Nautical Fiction');
         expect(newBookRecord.ISBN).to.equal('9780349112336');
       });
+
+      it('returns an error if title is null', async () => {
+        const response = await request(app).post('/books').send({
+          author: 'Herman Melville',
+          genre: 'Nautical Fiction',
+          ISBN: '9780349112336',
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.errors.length).to.equal(1);
+        expect(response.body.errors[0]).to.equal('Title is required.');
+      });
+
+      it('returns an error if author is null', async () => {
+        const response = await request(app).post('/books').send({
+          title: 'Moby Dick',
+          genre: 'Nautical Fiction',
+          ISBN: '9780349112336',
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.errors.length).to.equal(1);
+        expect(response.body.errors[0]).to.equal('Author is required.');
+      });
     });
   });
 
@@ -88,8 +112,50 @@ describe('/books', () => {
         expect(response.body.ISBN).to.equal('9780349112336');
       });
 
-      it("throws an error if the book doesn't exist", async () => {
+      it("returns an error if the book doesn't exist", async () => {
         const response = await request(app).get('/books/9999');
+
+        expect(response.status).to.equal(404);
+        expect(response.body.error).to.equal('The book could not be found.');
+      });
+    });
+
+    describe('PATCH /books/:id', () => {
+      it('updates fields by id', async () => {
+        const book = books[0];
+        const response = await request(app)
+          .patch(`/books/${book.id}`)
+          .send({ title: 'Doby Mick' });
+        const updatedBookRecord = await Book.findByPk(book.id, {
+          raw: true,
+        });
+
+        expect(response.status).to.equal(200);
+        expect(updatedBookRecord.title).to.equal('Doby Mick');
+      });
+
+      it("returns an error if the book doesn't exist", async () => {
+        const response = await request(app)
+          .patch('/books/1000')
+          .send({ title: 'Booky McBookFace' });
+
+        expect(response.status).to.equal(404);
+        expect(response.body.error).to.equal('The book could not be found.');
+      });
+    });
+
+    describe('DELETE /books/:id', () => {
+      it('deletes books by id', async () => {
+        const book = books[0];
+        const response = await request(app).delete(`/books/${book.id}`);
+        const deletedBook = await Book.findByPk(book.id, { raw: true });
+
+        expect(response.status).to.equal(204);
+        expect(deletedBook).to.equal(null);
+      });
+
+      it("returns an error if the book doesn't exist", async () => {
+        const response = await request(app).delete('/books/1000');
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal('The book could not be found.');
