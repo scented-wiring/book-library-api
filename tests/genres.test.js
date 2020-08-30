@@ -62,7 +62,7 @@ describe('/genres', () => {
     });
 
     describe('GET /genres', () => {
-      it('Get all genre records', async () => {
+      it('get all genre records', async () => {
         const response = await request(app).get('/genres');
 
         expect(response.status).to.equal(200);
@@ -77,7 +77,7 @@ describe('/genres', () => {
     });
 
     describe('GET /genres/:id', () => {
-      it('Gets genre record by id', async () => {
+      it('gets genre record by id', async () => {
         const genre = genres[0];
         const response = await request(app).get(`/genres/${genre.id}`);
 
@@ -85,7 +85,7 @@ describe('/genres', () => {
         expect(response.body.name).to.equal(genre.name);
       });
 
-      it("Returns a 404 if the genre doesn't exist", async () => {
+      it("returns a 404 if the genre doesn't exist", async () => {
         const response = await request(app).get('/genres/1000');
 
         expect(response.status).to.equal(404);
@@ -94,7 +94,7 @@ describe('/genres', () => {
     });
 
     describe('PATCH /genres/:id', () => {
-      it('Updates genre field by id', async () => {
+      it('updates genre field by id', async () => {
         const genre = genres[0];
         const response = await request(app)
           .patch(`/genres/${genre.id}`)
@@ -107,7 +107,7 @@ describe('/genres', () => {
         expect(updatedGenreRecord.name).to.equal('Sci-fi');
       });
 
-      it("Returns a 404 if the genre doesn't exist", async () => {
+      it("returns a 404 if the genre doesn't exist", async () => {
         const response = await request(app)
           .patch('/genres/1000')
           .send({ name: 'Non-fiction' });
@@ -118,7 +118,7 @@ describe('/genres', () => {
     });
 
     describe('DELETE /genres/:id', () => {
-      it('Deletes genre record by id', async () => {
+      it('deletes genre record by id', async () => {
         const genre = genres[0];
         const response = await request(app).delete(`/genres/${genre.id}`);
         const deletedReader = await Genre.findByPk(genre.id, { raw: true });
@@ -127,7 +127,7 @@ describe('/genres', () => {
         expect(deletedReader).to.equal(null);
       });
 
-      it("Returns a 404 if the genre doesn't exist", async () => {
+      it("returns a 404 if the genre doesn't exist", async () => {
         const response = await request(app).delete('/genres/1000000');
 
         expect(response.status).to.equal(404);
