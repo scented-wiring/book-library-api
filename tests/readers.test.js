@@ -9,7 +9,7 @@ describe('/readers', () => {
 
   describe('with no records in the database', () => {
     describe('POST /readers', () => {
-      it('creates a new reader in the database', async () => {
+      it('creates a new reader in the database without returning password', async () => {
         const response = await request(app).post('/readers').send({
           name: 'Elizabeth Bennet',
           email: 'future_ms_darcy@gmail.com',
@@ -21,6 +21,7 @@ describe('/readers', () => {
 
         expect(response.status).to.equal(201);
         expect(response.body.name).to.equal('Elizabeth Bennet');
+        expect(response.body.password).to.equal(undefined);
         expect(newReaderRecord.name).to.equal('Elizabeth Bennet');
         expect(newReaderRecord.email).to.equal('future_ms_darcy@gmail.com');
         expect(newReaderRecord.password).to.equal('bennet1000');
@@ -115,7 +116,7 @@ describe('/readers', () => {
     });
 
     describe('GET /readers', () => {
-      it('gets all readers records', async () => {
+      it("gets all readers records but doesn't return passwords", async () => {
         const response = await request(app).get('/readers');
 
         expect(response.status).to.equal(200);
@@ -126,20 +127,20 @@ describe('/readers', () => {
 
           expect(reader.name).to.equal(expected.name);
           expect(reader.email).to.equal(expected.email);
-          expect(reader.password).to.equal(expected.password);
+          expect(reader.password).to.equal(undefined);
         });
       });
     });
 
     describe('GET /readers/:id', () => {
-      it('gets readers record by id', async () => {
+      it("gets readers record by id but doesn't return passwords", async () => {
         const reader = readers[0];
         const response = await request(app).get(`/readers/${reader.id}`);
 
         expect(response.status).to.equal(200);
         expect(response.body.name).to.equal(reader.name);
         expect(response.body.email).to.equal(reader.email);
-        expect(response.body.password).to.equal(reader.password);
+        expect(response.body.password).to.equal(undefined);
       });
 
       it('returns a 404 if the reader does not exist', async () => {
@@ -151,17 +152,18 @@ describe('/readers', () => {
     });
 
     describe('PATCH /readers/:id', () => {
-      it('updates readers email by id', async () => {
+      it("updates reader fields by id but doesn't return passwords", async () => {
         const reader = readers[0];
         const response = await request(app)
           .patch(`/readers/${reader.id}`)
-          .send({ email: 'miss_e_bennet@gmail.com' });
+          .send({ password: 'hellohello123123' });
         const updatedReaderRecord = await Reader.findByPk(reader.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(200);
-        expect(updatedReaderRecord.email).to.equal('miss_e_bennet@gmail.com');
+        expect(response.body.password).to.equal(undefined);
+        expect(updatedReaderRecord.password).to.equal('hellohello123123');
       });
 
       it('returns a 404 if the reader does not exist', async () => {
