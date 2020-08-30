@@ -11,33 +11,33 @@ describe('/genres', () => {
     describe('POST /genres', () => {
       it('creates a new genre in the database', async () => {
         const response = await request(app).post('/genres').send({
-          name: 'Horror',
+          genre: 'Horror',
         });
         const newGenreRecord = await Genre.findByPk(response.body.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(201);
-        expect(response.body.name).to.equal('Horror');
-        expect(newGenreRecord.name).to.equal('Horror');
+        expect(response.body.genre).to.equal('Horror');
+        expect(newGenreRecord.genre).to.equal('Horror');
       });
 
-      it('returns an error if genre name is null', async () => {
+      it('returns an error if genre is null', async () => {
         const response = await request(app).post('/genres').send({});
 
         expect(response.status).to.equal(400);
         expect(response.body.errors.length).to.equal(1);
-        expect(response.body.errors[0]).to.equal('Genre name is required.');
+        expect(response.body.errors[0]).to.equal('Genre is required.');
       });
 
-      it('returns an error if genre name is empty', async () => {
+      it('returns an error if genre is empty', async () => {
         const response = await request(app).post('/genres').send({
           genre: '',
         });
 
         expect(response.status).to.equal(400);
         expect(response.body.errors.length).to.equal(1);
-        expect(response.body.errors[0]).to.equal('Genre name is required.');
+        expect(response.body.errors[0]).to.equal('Genre is required.');
       });
     });
   });
@@ -50,13 +50,13 @@ describe('/genres', () => {
 
       genres = await Promise.all([
         Genre.create({
-          name: 'Horror',
+          genre: 'Horror',
         }),
         Genre.create({
-          name: 'Thriller',
+          genre: 'Thriller',
         }),
         Genre.create({
-          name: 'Non-fiction',
+          genre: 'Non-fiction',
         }),
       ]);
     });
@@ -71,7 +71,7 @@ describe('/genres', () => {
         response.body.forEach((genre) => {
           const expected = genres.find((a) => a.id === genre.id);
 
-          expect(genre.name).to.equal(expected.name);
+          expect(genre.genre).to.equal(expected.genre);
         });
       });
     });
@@ -82,7 +82,7 @@ describe('/genres', () => {
         const response = await request(app).get(`/genres/${genre.id}`);
 
         expect(response.status).to.equal(200);
-        expect(response.body.name).to.equal(genre.name);
+        expect(response.body.genre).to.equal(genre.genre);
       });
 
       it("returns a 404 if the genre doesn't exist", async () => {
@@ -98,19 +98,19 @@ describe('/genres', () => {
         const genre = genres[0];
         const response = await request(app)
           .patch(`/genres/${genre.id}`)
-          .send({ name: 'Sci-fi' });
+          .send({ genre: 'Sci-fi' });
         const updatedGenreRecord = await Genre.findByPk(genre.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(200);
-        expect(updatedGenreRecord.name).to.equal('Sci-fi');
+        expect(updatedGenreRecord.genre).to.equal('Sci-fi');
       });
 
       it("returns a 404 if the genre doesn't exist", async () => {
         const response = await request(app)
           .patch('/genres/1000')
-          .send({ name: 'Non-fiction' });
+          .send({ genre: 'Non-fiction' });
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal('The genre could not be found.');
