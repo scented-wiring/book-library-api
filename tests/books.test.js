@@ -22,13 +22,11 @@ describe('/books', () => {
         expect(response.status).to.equal(201);
         expect(response.body.title).to.equal('Moby Dick');
         expect(newBookRecord.title).to.equal('Moby Dick');
-        expect(newBookRecord.author).to.equal('Herman Melville');
         expect(newBookRecord.ISBN).to.equal('9780349112336');
       });
 
       it('returns an error if title is null', async () => {
         const response = await request(app).post('/books').send({
-          author: 'Herman Melville',
           genre: 'Nautical Fiction',
           ISBN: '9780349112336',
         });
@@ -36,18 +34,6 @@ describe('/books', () => {
         expect(response.status).to.equal(400);
         expect(response.body.errors.length).to.equal(1);
         expect(response.body.errors[0]).to.equal('Title is required.');
-      });
-
-      it('returns an error if author is null', async () => {
-        const response = await request(app).post('/books').send({
-          title: 'Moby Dick',
-          genre: 'Nautical Fiction',
-          ISBN: '9780349112336',
-        });
-
-        expect(response.status).to.equal(400);
-        expect(response.body.errors.length).to.equal(1);
-        expect(response.body.errors[0]).to.equal('Author is required.');
       });
     });
   });
@@ -61,17 +47,14 @@ describe('/books', () => {
       books = await Promise.all([
         Book.create({
           title: 'Moby Dick',
-          author: 'Herman Melville',
           ISBN: '9780349112336',
         }),
         Book.create({
           title: 'To Kill a Mockingbird',
-          author: 'Harper Lee',
           ISBN: '9780099419785',
         }),
         Book.create({
           title: 'Things Fall Apart',
-          author: 'Chinua Achebe',
           ISBN: '9780435272463',
         }),
       ]);
@@ -88,7 +71,6 @@ describe('/books', () => {
           const expected = books.find((a) => a.id === book.id);
 
           expect(book.title).to.equal(expected.title);
-          expect(book.author).to.equal(expected.author);
           expect(book.ISBN).to.equal(expected.ISBN);
         });
       });
@@ -101,7 +83,6 @@ describe('/books', () => {
 
         expect(response.status).to.equal(200);
         expect(response.body.title).to.equal('Moby Dick');
-        expect(response.body.author).to.equal('Herman Melville');
         expect(response.body.ISBN).to.equal('9780349112336');
       });
 

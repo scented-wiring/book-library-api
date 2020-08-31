@@ -11,16 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
-    author: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          args: [true],
-          msg: 'Author is required.',
-        },
-      },
-    },
     ISBN: DataTypes.STRING,
   };
 
