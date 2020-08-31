@@ -13,6 +13,13 @@ const getModel = (model) => {
   return models[model];
 };
 
+const getOptions = (model) => {
+  if (model === 'book') return { include: Genre };
+  if (model === 'genre') return { include: Book };
+
+  return {};
+};
+
 const removePassword = (obj) => {
   if (obj.hasOwnProperty('password')) {
     delete obj.password;
@@ -23,8 +30,9 @@ const removePassword = (obj) => {
 
 const getAllItems = (res, model) => {
   const Model = getModel(model);
+  const options = getOptions(model);
 
-  return Model.findAll().then((items) => {
+  return Model.findAll({ ...options }).then((items) => {
     const itemsWithoutPassword = items.map((item) =>
       removePassword(item.dataValues)
     );
@@ -67,8 +75,9 @@ const updateItem = (res, model, item, id) => {
 
 const getItemById = (res, model, id) => {
   const Model = getModel(model);
+  const options = getOptions(model);
 
-  return Model.findByPk(id).then((item) => {
+  return Model.findByPk(id, { ...options }).then((item) => {
     if (!item) {
       res.status(404).json(get404Error(model));
     } else {

@@ -11,15 +11,15 @@ describe('/authors', () => {
     describe('POST /authors', () => {
       it('creates a new author in the database', async () => {
         const response = await request(app).post('/authors').send({
-          author: 'Harper Lee',
+          author: 'Ray Bradbury',
         });
         const newAuthorRecord = await Author.findByPk(response.body.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(201);
-        expect(response.body.author).to.equal('Harper Lee');
-        expect(newAuthorRecord.author).to.equal('Harper Lee');
+        expect(response.body.author).to.equal('Ray Bradbury');
+        expect(newAuthorRecord.author).to.equal('Ray Bradbury');
       });
 
       it('returns an error if author is null', async () => {
@@ -98,13 +98,13 @@ describe('/authors', () => {
         const author = authors[0];
         const response = await request(app)
           .patch(`/authors/${author.id}`)
-          .send({ author: 'George Orwell' });
+          .send({ author: 'H G Wells' });
         const updatedAuthorRecord = await Author.findByPk(author.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(200);
-        expect(updatedAuthorRecord.author).to.equal('George Orwell');
+        expect(updatedAuthorRecord.author).to.equal('H G Wells');
       });
 
       it("returns a 404 if the author doesn't exist", async () => {

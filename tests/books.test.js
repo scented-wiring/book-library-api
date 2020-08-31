@@ -13,7 +13,6 @@ describe('/books', () => {
         const response = await request(app).post('/books').send({
           title: 'Moby Dick',
           author: 'Herman Melville',
-          genre: 'Nautical Fiction',
           ISBN: '9780349112336',
         });
         const newBookRecord = await Book.findByPk(response.body.id, {
@@ -24,7 +23,6 @@ describe('/books', () => {
         expect(response.body.title).to.equal('Moby Dick');
         expect(newBookRecord.title).to.equal('Moby Dick');
         expect(newBookRecord.author).to.equal('Herman Melville');
-        expect(newBookRecord.genre).to.equal('Nautical Fiction');
         expect(newBookRecord.ISBN).to.equal('9780349112336');
       });
 
@@ -64,19 +62,16 @@ describe('/books', () => {
         Book.create({
           title: 'Moby Dick',
           author: 'Herman Melville',
-          genre: 'Nautical Fiction',
           ISBN: '9780349112336',
         }),
         Book.create({
           title: 'To Kill a Mockingbird',
           author: 'Harper Lee',
-          genre: 'Southern Gothic',
           ISBN: '9780099419785',
         }),
         Book.create({
           title: 'Things Fall Apart',
           author: 'Chinua Achebe',
-          genre: 'Historical Fiction',
           ISBN: '9780435272463',
         }),
       ]);
@@ -94,7 +89,6 @@ describe('/books', () => {
 
           expect(book.title).to.equal(expected.title);
           expect(book.author).to.equal(expected.author);
-          expect(book.genre).to.equal(expected.genre);
           expect(book.ISBN).to.equal(expected.ISBN);
         });
       });
@@ -108,7 +102,6 @@ describe('/books', () => {
         expect(response.status).to.equal(200);
         expect(response.body.title).to.equal('Moby Dick');
         expect(response.body.author).to.equal('Herman Melville');
-        expect(response.body.genre).to.equal('Nautical Fiction');
         expect(response.body.ISBN).to.equal('9780349112336');
       });
 

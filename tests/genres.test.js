@@ -11,15 +11,15 @@ describe('/genres', () => {
     describe('POST /genres', () => {
       it('creates a new genre in the database', async () => {
         const response = await request(app).post('/genres').send({
-          genre: 'Horror',
+          genre: 'Travel',
         });
         const newGenreRecord = await Genre.findByPk(response.body.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(201);
-        expect(response.body.genre).to.equal('Horror');
-        expect(newGenreRecord.genre).to.equal('Horror');
+        expect(response.body.genre).to.equal('Travel');
+        expect(newGenreRecord.genre).to.equal('Travel');
       });
 
       it('returns an error if genre is null', async () => {
