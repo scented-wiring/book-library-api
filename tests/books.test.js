@@ -11,24 +11,22 @@ describe('/books', () => {
     describe('POST /books', () => {
       it('creates a new book in the database', async () => {
         const response = await request(app).post('/books').send({
-          title: 'Moby Dick',
-          author: 'Herman Melville',
-          ISBN: '9780349112336',
+          title: 'Test - The Novelisation',
+          ISBN: '9999999999999',
         });
         const newBookRecord = await Book.findByPk(response.body.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(201);
-        expect(response.body.title).to.equal('Moby Dick');
-        expect(newBookRecord.title).to.equal('Moby Dick');
-        expect(newBookRecord.ISBN).to.equal('9780349112336');
+        expect(response.body.title).to.equal('Test - The Novelisation');
+        expect(newBookRecord.title).to.equal('Test - The Novelisation');
+        expect(newBookRecord.ISBN).to.equal('9999999999999');
       });
 
       it('returns an error if title is null', async () => {
         const response = await request(app).post('/books').send({
-          genre: 'Nautical Fiction',
-          ISBN: '9780349112336',
+          ISBN: '909090148568',
         });
 
         expect(response.status).to.equal(400);
@@ -58,6 +56,17 @@ describe('/books', () => {
           ISBN: '9780435272463',
         }),
       ]);
+    });
+
+    describe('POST /books', () => {
+      it('returns an error if ISBN is not unique', async () => {
+        const response = await request(app).post('/books').send({
+          title: 'Moby Dick',
+          ISBN: '9780349112336',
+        });
+
+        expect(response.status).to.equal(400);
+      });
     });
 
     describe('GET /books', () => {
