@@ -18,9 +18,9 @@ Available data types are:
 - author
 - book
 - genre
-- reader.
+- reader
 
-  (Note that you will need to set up a local dev environment to make these requests. I intend to create a live demo than can be run from a browser in the future :)
+**Note that you will need to set up a local dev environment to make these requests. I intend to create a live demo than can be run from within a browser in the future :)**
 
 ## Built with
 
