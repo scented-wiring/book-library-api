@@ -4,14 +4,14 @@ An API that allows user to Create, Read, Update and Delete data in a book librar
 
 ## Instructions
 
-You can make the following requests to the server using Postman or a similar programme:
+You can make the following requests to the server using Postman or a similar programme. Replace "data" with the data type of your choice.
 
-- GET /(dataType) - Gets all available data of specified type
-- POST /(dataType) - Creates a new entry in the database of specified type
+- GET /(data) - Gets all available data of specified type
+- POST /(data) - Creates a new entry in the database of specified type
 
-- GET/(dataType)/:id - Gets data with the specified id number for the specified data type
-- PATCH/(dataType)/:id - Updates data with the specified id number for the specified data type
-- DELETE/(dataType)/:id - Updates data with the specified id number for the specified data type
+- GET/(data)/:id - Gets data with the specified id number for the specified data type
+- PATCH/(data)/:id - Updates data with the specified id number for the specified data type
+- DELETE/(data)/:id - Updates data with the specified id number for the specified data type
 
 Available data types are:
 
