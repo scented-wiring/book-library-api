@@ -48,12 +48,12 @@ describe('/books', () => {
           ISBN: '9780349112336',
         }),
         Book.create({
-          title: 'To Kill a Mockingbird',
-          ISBN: '9780099419785',
+          title: 'The Shining',
+          ISBN: '9782277211976',
         }),
         Book.create({
-          title: 'Things Fall Apart',
-          ISBN: '9780435272463',
+          title: 'Taken at the Flood',
+          ISBN: '9780006168898',
         }),
       ]);
     });
